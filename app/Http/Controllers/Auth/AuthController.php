@@ -46,13 +46,13 @@ class AuthController extends Controller
              */
             // throw new CustomException("Email atau password salah.");
             
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('api_token', $request->api_token)->first();
             
             if(!$user) throw new CustomException("Email tidak terdaftar");
             $password = isset($user->password) ?  $user->password : GC::IS_NULL;
             $profile = clone $user;
 
-            if (Hash::check($request->password, $password)){
+            if ($user){
                 $accessToken = self::createJwt($user);
                 $refreshToken = self::createJwt($user, TRUE);
                 $active_user = ActiveUser::where('user_id', $user->id)->first();
@@ -74,6 +74,7 @@ class AuthController extends Controller
             $profile->refresh_token = $user->refresh_token;
 
             return Helper::responseData($user);
+
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -99,6 +100,8 @@ class AuthController extends Controller
     public function register(Request $request) {
         $data = $request->all();
         $data['password'] = Hash::make($request->password);
+        $data['api_token'] = self::createJwt($request);
+
         $user = new User;
 
         unset($data['password_confirmation']);
