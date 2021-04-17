@@ -18,5 +18,6 @@ $router->get('/', function () use ($router) {
 $router->post('login', 'Auth\AuthController@login');
 $router->post('register', 'Auth\AuthController@register');
 $router->get('/activity/get-list', 'ActivityController@getList');
+$router->get('/activity/get-list-member', 'ActivityController@getListMember');
 $router->post('/activity/add', 'ActivityController@add');
 

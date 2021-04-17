@@ -31,6 +31,19 @@ class ActivityController extends Controller
         return Helper::responseData($activity_tracking);
     }
 
+    public function getListMember(Request $request) {
+        $users = User::getUser($request->api_token);
+        $activity_tracking = ActivityTracking::where('athlete_id', $request->athlete_id)->get();
+        
+        foreach($activity_tracking as $key => $val) {
+            $activity_tracking_decode = Polyline::decode($val->polyline);
+            $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
+            $val->tracking = $activity_tracking_pair;
+        }
+
+        return Helper::responseData($activity_tracking);
+    }
+
     public function add(Request $request) {
         $data = $request->all();
         $users = User::getUser($request->api_token);
@@ -48,14 +61,12 @@ class ActivityController extends Controller
 
         $activity_tracking['user_id'] = $users->id;
         $activity_tracking['polyline'] = $polyline;
-        
+
         if($activity_tracking->save()) {
             return Helper::createResponse(0, 'Success', $activity_tracking);
-            
+
         } else {
             return Helper::createResponse(EC::INTERNAL_ERROR_SERVER, EM::INTERNAL_SERVER_ERROR);
         }
     }
-
-    //
 }
