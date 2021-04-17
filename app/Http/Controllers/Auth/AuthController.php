@@ -101,6 +101,7 @@ class AuthController extends Controller
         $data = $request->all();
         $data['password'] = Hash::make($request->password);
         $data['api_token'] = self::createJwt($request);
+        dd($data['api_token']);
 
         $user = new User;
 
