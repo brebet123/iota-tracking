@@ -46,7 +46,7 @@ class AuthController extends Controller
              */
             // throw new CustomException("Email atau password salah.");
             
-            $user = User::where('api_token', $request->api_token)->first();
+            $user = User::where('api_token', $request->api_token)->first(); 
             
             if(!$user) throw new CustomException("Email tidak terdaftar");
             $password = isset($user->password) ?  $user->password : GC::IS_NULL;
