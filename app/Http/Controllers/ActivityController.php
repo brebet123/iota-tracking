@@ -22,7 +22,7 @@ class ActivityController extends Controller
     }
 
     public function getList(Request $request) {
-        $users = User::getUser($request->api_token);
+        $users = User::getUser( $request->bearerToken());
         $activity_tracking = ActivityTracking::where('activity_trackings_code', $request->activity_trackings_code)->first();
         $activity_tracking_decode = Polyline::decode($activity_tracking->polyline);
         $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
@@ -32,7 +32,7 @@ class ActivityController extends Controller
     }
 
     public function getListMember(Request $request) {
-        $users = User::getUser($request->api_token);
+        $users = User::getUser( $request->bearerToken());
         $activity_tracking = ActivityTracking::where('athlete_id', $request->athlete_id)->get();
         
         foreach($activity_tracking as $key => $val) {
@@ -46,7 +46,7 @@ class ActivityController extends Controller
 
     public function add(Request $request) {
         $data = $request->all();
-        $users = User::getUser($request->api_token);
+        $users = User::getUser( $request->bearerToken());
 
         $activity_tracking = new ActivityTracking;
         $arrTracking = $request->tracking;

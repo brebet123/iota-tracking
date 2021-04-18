@@ -15,7 +15,7 @@ class ErrorCode
     const EXTERNAL_ERROR_SERVER = 106;
     const DATA_NOT_FOUND = 107;
     const DATA_ALREADY_EXIST = 108;
-    const UNAUTHORIZED = 109;
+    const UNAUTHORIZED = 401;
     const INVALID_VERIFICATION = 110;
     const FAILED_UPLOAD_FILE = 111;
     const INVALID_RESET_PASSWORD = 112;

@@ -25,5 +25,6 @@ class ErrorMessage
     const GLOBAL_MESSAGE = 'Please contact to your system administrator about this error.';
     const INVALID_PASSWORD = 'Password Salah';
     const PROFILE_NOT_COMPLETED = 'Profil anda belum lengkap';
+    const UNAUTHORIZED = 'Unauthorized';
 
 }

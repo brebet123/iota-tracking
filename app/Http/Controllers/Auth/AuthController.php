@@ -65,15 +65,19 @@ class AuthController extends Controller
                 $active_user->access_token = $accessToken;
                 $active_user->refresh_token = $refreshToken;
                 $active_user->save();
-                $user->access_token = $accessToken;
-                $user->refresh_token = $refreshToken;
+
+                $users = new \stdClass;
+                $users->name = $user->name;
+                $users->company_code = $user->company_code;
+                $users->access_token = $accessToken;
+                $users->refresh_token = $refreshToken;
             }
 
             else throw new CustomException("Email atau password salah.");
             $profile->access_token = $user->access_token;
             $profile->refresh_token = $user->refresh_token;
 
-            return Helper::responseData($user);
+            return Helper::responseData($users);
 
         } catch (\Throwable $th) {
             throw $th;
