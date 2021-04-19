@@ -11,6 +11,7 @@ use App\Exceptions\CustomException;
 use App\Helper;
 use App\User;
 use App\Model\ActiveUser;
+use App\Model\UserClient;
 
 class AuthController extends Controller
 {
@@ -46,24 +47,36 @@ class AuthController extends Controller
              */
             // throw new CustomException("Email atau password salah.");
             
-            $user = User::where('api_token', $request->app_key)->first(); 
+            $user = User::where('api_token', $request->app_key)->first();
             
-            if(!$user) throw new CustomException("Email tidak terdaftar");
+            if(!$user) throw new CustomException("Token tidak terdaftar");
             $password = isset($user->password) ?  $user->password : GC::IS_NULL;
             $profile = clone $user;
 
             if ($user) {
-                $accessToken = self::createJwt($user);
-                $refreshToken = self::createJwt($user, TRUE);
-                $active_user = ActiveUser::where('user_id', $user->id)->first();
+                $active_user = ActiveUser::where('user_id', $user->id)->where('company_code', $user->company_code)->where('email_client', $request->email_client)->first();
 
                 if(!$active_user) {
                     $active_user = new ActiveUser;
+                    $user_client = new UserClient;
+                    $user_client->email_client = $request->email_client;
+                    $user_client->id_client = $request->id_client;
+                    $user_client->company_code = $user->company_code;
+                    $user_client->save();
+                
+                } else {
+                    $user_client = UserClient::where('company_code', $user->company_code)->where('email_client', $request->email_client)->first();
                 }
+
+                $accessToken = self::createJwt($user_client);
+                $refreshToken = self::createJwt($user_client, TRUE);
 
                 $active_user->user_id = $user->id;
                 $active_user->access_token = $accessToken;
                 $active_user->refresh_token = $refreshToken;
+                $active_user->company_code = $user->company_code;
+                $active_user->company_id = $user->company_id;
+                $active_user->email_client = $request->email_client;
                 $active_user->save();
 
                 $users = new \stdClass;
