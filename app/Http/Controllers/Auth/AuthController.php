@@ -107,7 +107,7 @@ class AuthController extends Controller
             'iat' => $issued_at, // Time when JWT was issued.
             'exp' => $is_refresh_token
                 ?($issued_at + 60*60*24*30) // Waktu kadaluarsa 30 hari
-                :($issued_at + 60*60) // Waktu kadaluarsa 1 jam
+                :($issued_at + 120*120) // Waktu kadaluarsa 2 jam
         ];
 
         JWT::$leeway = 60; // $leeway dalam detik

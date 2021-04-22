@@ -9,10 +9,10 @@ class Helper {
     static function responseData($data = false, $paginate = null){
         if (!$data && [] !== $data) $data = json_decode("{}");
         if($paginate == null){
-            $data = ["meta" => ['error' => EC::NOTHING,'message' => EM::NONE ],
+            $data = ['error' => EC::NOTHING,'message' => EM::NONE ,
             "data" => $data ];
         }else{
-            $data = ["meta" => ['error' => EC::NOTHING,'message' => EM::NONE,'page' => $paginate ],
+            $data = ['error' => EC::NOTHING,'message' => EM::NONE,'page' => $paginate,
                     "data" => $data ];
         }
 
@@ -23,7 +23,7 @@ class Helper {
         if (!$data && [] !== $data) $data = json_decode("{}");
 
         $data = [
-            "meta" => ['error' => $EC, 'message' => $EM ],
+            'error' => $EC, 'message' => $EM,
             "data" => $data
         ];
 
