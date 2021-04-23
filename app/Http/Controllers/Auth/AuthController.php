@@ -103,13 +103,19 @@ class AuthController extends Controller
         $issued_at = time();
         // Hanya meng-encode atribut: id, nama, email
         // unset($data->no_ponsel, $data->tempat_lahir, $data->tanggal_lahir, $data->id_firebase);
+        // $payload = [
+        //     'iss' => "restep-online", // Issuer of the token
+        //     'sub' => $data, // Subject of the token
+        //     'iat' => $issued_at, // Time when JWT was issued.
+        //     'exp' => $is_refresh_token
+        //         ?($issued_at + 60*60*24*30) // Waktu kadaluarsa 30 hari
+        //         :($issued_at + 120*120) // Waktu kadaluarsa 2 jam
+        // ];
+
         $payload = [
             'iss' => "restep-online", // Issuer of the token
             'sub' => $data, // Subject of the token
-            'iat' => $issued_at, // Time when JWT was issued.
-            'exp' => $is_refresh_token
-                ?($issued_at + 60*60*24*30) // Waktu kadaluarsa 30 hari
-                :($issued_at + 120*120) // Waktu kadaluarsa 2 jam
+            'iat' => $issued_at // Time when JWT was issued.
         ];
 
         JWT::$leeway = 60; // $leeway dalam detik

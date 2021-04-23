@@ -28,6 +28,7 @@ class Helper {
         ];
 
         if ($EC > 0 || is_string($EC)) unset($data['data']);
-        return response()->json($data, 200);
+
+        return response()->json($data, $EC);
     }
 }
