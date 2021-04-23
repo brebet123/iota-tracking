@@ -55,6 +55,7 @@ class AuthController extends Controller
 
             if ($user) {
                 $active_user = ActiveUser::where('user_id', $user->id)->where('company_code', $user->company_code)->where('email_client', $request->email_client)->first();
+                // dd($active_user);
 
                 if(!$active_user) {
                     $active_user = new ActiveUser;
@@ -63,13 +64,14 @@ class AuthController extends Controller
                     $user_client->id_client = $request->id_client;
                     $user_client->company_code = $user->company_code;
                     $user_client->save();
+                    $accessToken = self::createJwt($user_client);
+                    $refreshToken = self::createJwt($user_client, TRUE);
                 
                 } else {
                     $user_client = UserClient::where('company_code', $user->company_code)->where('email_client', $request->email_client)->first();
+                    $accessToken = $active_user->access_token;
+                    $refreshToken = $active_user->refresh_token;
                 }
-
-                $accessToken = self::createJwt($user_client);
-                $refreshToken = self::createJwt($user_client, TRUE);
 
                 $active_user->user_id = $user->id;
                 $active_user->access_token = $accessToken;
@@ -83,7 +85,7 @@ class AuthController extends Controller
                 $users->name = $user->name;
                 $users->company_code = $user->company_code;
                 $users->access_token = $accessToken;
-                $users->refresh_token = $refreshToken;
+                // $users->refresh_token = $refreshToken;
             }
 
             else throw new CustomException("Email atau password salah.");
