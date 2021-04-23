@@ -33,7 +33,7 @@ class ActivityController extends Controller
 
     public function getListMember(Request $request) {
         $users = User::getUser( $request->bearerToken());
-        $activity_tracking = ActivityTracking::where('athlete_id', $request->athlete_id)->get();
+        $activity_tracking = ActivityTracking::where('athlete_id', $request->athlete_id)->orderBy('DESC')->get();
         
         foreach($activity_tracking as $key => $val) {
             $activity_tracking_decode = Polyline::decode($val->polyline);
