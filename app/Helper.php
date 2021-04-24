@@ -22,8 +22,10 @@ class Helper {
     static function createResponse($EC, $EM, $data = false) {
         if (!$data && [] !== $data) $data = json_decode("{}");
 
+        if($EC == 200) $ECM = 0;
+
         $data = [
-            'error' => $EC, 'message' => $EM,
+            'error' => $ECM, 'message' => $EM,
             "data" => $data
         ];
 
