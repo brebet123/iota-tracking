@@ -63,7 +63,7 @@ class ActivityController extends Controller
         $activity_tracking['polyline'] = $polyline;
 
         if($activity_tracking->save()) {
-            return Helper::createResponse(0, 'Success', $activity_tracking);
+            return Helper::createResponse(200, 'Success', $activity_tracking);
 
         } else {
             return Helper::createResponse(EC::INTERNAL_ERROR_SERVER, EM::INTERNAL_SERVER_ERROR);
