@@ -69,4 +69,19 @@ class ActivityController extends Controller
             return Helper::createResponse(EC::INTERNAL_ERROR_SERVER, EM::INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function getListDataUpdated(Request $request) {
+        try {
+
+
+        } catch(\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function tes(Request $request) {
+        $arr = [];
+        $activity_tracking_decode = Polyline::decode($arr);
+        $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
+    }
 }

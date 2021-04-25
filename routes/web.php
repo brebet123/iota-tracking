@@ -24,6 +24,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 });
 
 $router->group(['middleware' => 'authClient'], function () use ($router) {
-    $router->get('client/activity/get-list', 'ActivityController@getList');
+    $router->get('client/activity/get-list', 'ActivityController@getListDataUpdated');
     $router->get('client/activity/get-list-member', 'ActivityController@getListMember');
 });
+
+$router->get('/polyline/tes', 'ActivityController@tes');
