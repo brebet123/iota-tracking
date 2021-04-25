@@ -47,11 +47,12 @@ class ActivityController extends Controller
     public function add(Request $request) {
         $data = $request->all();
         $users = User::getUser( $request->bearerToken());
-
+        
         $activity_tracking = new ActivityTracking;
         $arrTracking = $request->tracking;
         $polyline = Polyline::encode($arrTracking);
-
+        $data['pace_km'] = json_encode($data['pace_km']);
+        
         unset($data['api_token']);
         unset($data['tracking']);
 
