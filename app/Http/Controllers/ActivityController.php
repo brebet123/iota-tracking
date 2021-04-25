@@ -27,6 +27,7 @@ class ActivityController extends Controller
         $activity_tracking_decode = Polyline::decode($activity_tracking->polyline);
         $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
         $activity_tracking->tracking = $activity_tracking_pair;
+        $activity_tracking->pace_km = json_decode($activity_tracking->pace_km, true);
 
         return Helper::responseData($activity_tracking);
     }
@@ -39,6 +40,7 @@ class ActivityController extends Controller
             $activity_tracking_decode = Polyline::decode($val->polyline);
             $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
             $val->tracking = $activity_tracking_pair;
+            $val->pace_km = json_decode($val->pace_km, true);
         }
 
         return Helper::responseData($activity_tracking);
