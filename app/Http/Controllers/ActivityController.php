@@ -24,6 +24,7 @@ class ActivityController extends Controller
     public function getList(Request $request) {
         $users = User::getUser( $request->bearerToken());
         $activity_tracking = ActivityTracking::where('activity_trackings_code', $request->activity_trackings_code)->first();
+        $activity_tracking->athlete_name = $users->name_client;
         $activity_tracking_decode = Polyline::decode($activity_tracking->polyline);
         $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
         $activity_tracking->tracking = $activity_tracking_pair;
@@ -37,6 +38,7 @@ class ActivityController extends Controller
         $activity_tracking = ActivityTracking::where('athlete_id', $request->athlete_id)->orderBy('id', 'DESC')->get();
         
         foreach($activity_tracking as $key => $val) {
+            $val->athlete_name = $users->name_client;;
             $activity_tracking_decode = Polyline::decode($val->polyline);
             $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
             $val->tracking = $activity_tracking_pair;
@@ -75,7 +77,16 @@ class ActivityController extends Controller
 
     public function getListDataUpdated(Request $request) {
         try {
+            $activity_tracking = ActivityTracking::where('athlete_id', $request->athlete_id)->orderBy('id', 'DESC')->get();
+            
+            foreach($activity_tracking as $key => $val) {
+                $activity_tracking_decode = Polyline::decode($val->polyline);
+                $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
+                $val->tracking = $activity_tracking_pair;
+                $val->pace_km = json_decode($val->pace_km, true);
+            }
 
+            return Helper::responseData($activity_tracking);
 
         } catch(\Throwable $th) {
             throw $th;

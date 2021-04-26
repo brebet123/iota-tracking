@@ -55,12 +55,12 @@ class AuthController extends Controller
 
             if ($user) {
                 $active_user = ActiveUser::where('user_id', $user->id)->where('company_code', $user->company_code)->where('email_client', $request->email_client)->first();
-                // dd($active_user);
 
                 if(!$active_user) {
                     $active_user = new ActiveUser;
                     $user_client = new UserClient;
                     $user_client->email_client = $request->email_client;
+                    $user_client->name_client = $request->name_client;
                     $user_client->id_client = $request->id_client;
                     $user_client->company_code = $user->company_code;
                     $user_client->save();
