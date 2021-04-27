@@ -31,6 +31,7 @@ class ActivityController extends Controller
         $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
         $activity_tracking->tracking = $activity_tracking_pair;
         $activity_tracking->pace_km = json_decode($activity_tracking->pace_km, true);
+        $activity_tracking->pace_50m = json_decode($activity_tracking->pace_50m, true);
         $activity_tracking->date = date('Y-m-d H:i:s', strtotime($activity_tracking->created_at));
 
         return Helper::responseData($activity_tracking);
@@ -47,6 +48,7 @@ class ActivityController extends Controller
             $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
             $val->tracking = $activity_tracking_pair;
             $val->pace_km = json_decode($val->pace_km, true);
+            $val->pace_50m = json_decode($val->pace_50m, true);
             $val->date = date('Y-m-d H:i:s', strtotime($val->created_at));
         }
 
@@ -61,6 +63,7 @@ class ActivityController extends Controller
         $arrTracking = $request->tracking;
         $polyline = Polyline::encode($arrTracking);
         $data['pace_km'] = json_encode($data['pace_km']);
+        $data['pace_50m'] = json_encode($data['pace_50m']);
         
         unset($data['api_token']);
         unset($data['tracking']);
@@ -89,6 +92,7 @@ class ActivityController extends Controller
                 $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
                 $val->tracking = $activity_tracking_pair;
                 $val->pace_km = json_decode($val->pace_km, true);
+                $val->pace_50m = json_decode($val->pace_50m, true);
                 $val->created_at = date('Y-m-d H:i:s', strtotime($val->created_at));
             }
 
