@@ -30,8 +30,8 @@ class ActivityController extends Controller
         $activity_tracking_decode = Polyline::decode($activity_tracking->polyline);
         $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
         $activity_tracking->tracking = $activity_tracking_pair;
-        $activity_tracking->pace_km = json_decode($activity_tracking->pace_km, true);
-        $activity_tracking->pace_50m = json_decode($activity_tracking->pace_50m, true);
+        $activity_tracking->pace_km = isset($activity_tracking->pace_km) ? json_decode($activity_tracking->pace_km, true) : null;
+        $activity_tracking->pace_50m = isset($activity_tracking->pace_50m) ? json_decode($activity_tracking->pace_50m, true) : null;
         $activity_tracking->date = date('Y-m-d H:i:s', strtotime($activity_tracking->created_at));
 
         return Helper::responseData($activity_tracking);
@@ -47,8 +47,8 @@ class ActivityController extends Controller
             $activity_tracking_decode = Polyline::decode($val->polyline);
             $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
             $val->tracking = $activity_tracking_pair;
-            $val->pace_km = json_decode($val->pace_km, true);
-            $val->pace_50m = json_decode($val->pace_50m, true);
+            $val->pace_km = isset($val->pace_km) ? json_decode($val->pace_km, true) : null;
+            $val->pace_50m = isset($val->pace_50m) ? json_decode($val->pace_50m, true) : null;
             $val->date = date('Y-m-d H:i:s', strtotime($val->created_at));
         }
 
