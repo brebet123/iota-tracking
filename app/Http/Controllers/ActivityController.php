@@ -62,8 +62,8 @@ class ActivityController extends Controller
         $activity_tracking = new ActivityTracking;
         $arrTracking = $request->tracking;
         $polyline = Polyline::encode($arrTracking);
-        $data['pace_km'] = json_encode($data['pace_km']);
-        $data['pace_50m'] = json_encode($data['pace_50m']);
+        $data['pace_km'] = isset($data['pace_km']) ? json_encode($data['pace_km']) : null;
+        $data['pace_50m'] = isset($data['pace_50m']) ? json_encode($data['pace_50m']) : null;
         
         unset($data['api_token']);
         unset($data['tracking']);
