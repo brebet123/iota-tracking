@@ -28,24 +28,6 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
-            /**
-             * TODO: Prepare login
-             *
-            $user = User::_kua($request);
-            if(!$user) throw new CustomException("Email tidak terdaftar");
-            $password = isset($user->password) ?  $user->password : GC::IS_NULL;
-            $profile = clone $user;
-
-            if (Hash::check($request->password, $password)){
-               $user->access_token = self::createJwt($user);
-               $user->refresh_token = self::createJwt($user, TRUE);
-            }
-            else throw new CustomException("Email atau password salah.");
-            $profile->access_token = $key->access_token;
-            $profile->refresh_token = $key->refresh_token;
-            return Helper::responseData($profile);
-             */
-            // throw new CustomException("Email atau password salah.");
             
             $user = User::where('api_token', $request->app_key)->first();
             
@@ -69,6 +51,8 @@ class AuthController extends Controller
                 
                 } else {
                     $user_client = UserClient::where('company_code', $user->company_code)->where('email_client', $request->email_client)->first();
+                    $user_client->name_client = $request->name_client;
+                    $user_client->save();
                     $accessToken = $active_user->access_token;
                     $refreshToken = $active_user->refresh_token;
                 }
