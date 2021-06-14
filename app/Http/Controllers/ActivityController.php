@@ -26,7 +26,7 @@ class ActivityController extends Controller
     public function getList(Request $request) {
         $users = User::getUser( $request->bearerToken());
         $userClientName = UserClient::getName($users->email_client);
-        $activity_tracking = ActivityTracking::where('activity_trackings_code', $request->activity_trackings_code)->first();
+        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('activity_trackings_code', $request->activity_trackings_code)->select('activity_trackings.*', 'global_param.param_name AS type_name')->first();
         $activity_tracking->athlete_name = $userClientName;
         $activity_tracking_decode = Polyline::decode($activity_tracking->polyline);
         $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
@@ -41,7 +41,7 @@ class ActivityController extends Controller
     public function getListMember(Request $request) {
         $users = User::getUser( $request->bearerToken());
         $userClientName = UserClient::getName($users->email_client);
-        $activity_tracking = ActivityTracking::where('athlete_id', $request->athlete_id)->orderBy('id', 'DESC')->get();
+        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('athlete_id', $request->athlete_id)->orderBy('id', 'DESC')->select('activity_trackings.*', 'global_param.param_name AS type_name')->get();
         
         foreach($activity_tracking as $key => $val) {
             $val->athlete_name = $userClientName;;
@@ -87,7 +87,7 @@ class ActivityController extends Controller
 
     public function getListDataUpdated(Request $request) {
         try {
-            $activity_tracking = ActivityTracking::where('athlete_id', $request->athlete_id)->orderBy('id', 'DESC')->get();
+            $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('athlete_id', $request->athlete_id)->orderBy('id', 'DESC')->select('activity_trackings.*', 'global_param.param_name AS type_name')->get();
             
             foreach($activity_tracking as $key => $val) {
                 $activity_tracking_decode = Polyline::decode($val->polyline);
