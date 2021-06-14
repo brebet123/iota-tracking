@@ -9,6 +9,7 @@ use App\User;
 use App\Helper;
 use App\Polyline;
 use App\Model\UserClient;
+use App\Model\GlobalParam;
 
 class ActivityController extends Controller
 {
@@ -65,7 +66,6 @@ class ActivityController extends Controller
         $data['pace_km'] = isset($data['pace_km']) ? json_encode($data['pace_km']) : null;
         $data['pace_50m'] = isset($data['pace_50m']) ? json_encode($data['pace_50m']) : null;
         $data['type_id'] = isset($data['type_act']) ? GlobalParam::getId($data['type_act']) : null;
-
         unset($data['api_token']);
         unset($data['tracking']);
         unset($data['type_act']);
