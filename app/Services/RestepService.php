@@ -62,6 +62,29 @@ class RestepService {
         }
     }
 
+    static function generateId() {
+        try {
+            $collectData = self::getactivities_nonstrava();
+            $collectDatas = collect($collectData)->pluck('id');
+            $id = self::getPK($collectDatas->toArray());
+
+            return $id;
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    static function getPK($arrayDt)
+    {
+        $key = mt_rand(1000000000, 9999999999);
+
+        while (array_search($key, $arrayDt)) {
+            $key = mt_rand(1000000000, 9999999999);
+        }
+        return $key;
+    }
+
     static function dispallacts($email, $request)
     {
         try {
@@ -87,20 +110,24 @@ class RestepService {
         }
     }
 
-    static function setactivities_nonstrava($data)
+    static function setactivities_nonstrava($data, $request)
     {
         try {
             $responses = Curl::to(config('services.restep.url').'/setactivities_nonstrava')
                          ->withContentType('application/json')
                          ->returnResponseObject()
                          ->withOption('USERPWD', config('services.restep.user').':'.config('services.restep.password'))
-                         ->withData($data)
+                         ->withData(["ID_App" => "RESTEP.ID", 
+                                     "Data" => [["refresh_token" => self::validate_uid()->refresh_token]],
+                                     "DataActivities" => [$data]
+                                    ])
                          ->asJson()
                          ->returnResponseObject()
                          ->post();
 
+            // dd($responses);
             $response = $responses->content;
-            if($response->status != "success") throw new CustomException("Ups: silahkan ulangi beberapa saat lagi.");
+            if($response->status != "success") return $responses = false;
 
             return $response->Data;
         } catch (\Throwable $th) {

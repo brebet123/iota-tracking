@@ -17,7 +17,23 @@ class GlobalParam extends CompModel
     static function getIdByName($param) {
         try {
             if($param == 'Ride') $param = 'Bike';
-            $result = GlobalParam::where('param_type', 'ACTIVITY_TYPE')->where('param_name', $param)->first()->id;
+            $result = GlobalParam::where('param_type', 'ACTIVITY_TYPE')->where('param_name', $param)->first();
+            
+            if($result) {
+                return $result->id;
+            
+            } else {
+                return GlobalParam::where('param_type', 'ACTIVITY_TYPE')->where('param_code', 'WALK')->first()->id;
+            }
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    static function getById($id) {
+        try {
+            $result = GlobalParam::find($id);
             
             return $result;
 

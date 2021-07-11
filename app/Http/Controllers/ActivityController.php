@@ -11,6 +11,7 @@ use App\Polyline;
 use App\Model\UserClient;
 use App\Model\GlobalParam;
 use App\Services\RestepService;
+use App\Model\GlobalParam AS GP;
 
 class ActivityController extends Controller
 {
@@ -65,7 +66,8 @@ class ActivityController extends Controller
     public function add(Request $request) {
         $data = $request->all();
         $users = User::getUser( $request->bearerToken());
-        
+        $genId = RestepService::generateId();
+        // dd($users);
         $activity_tracking = new ActivityTracking;
         $arrTracking = $request->tracking;
         $polyline = Polyline::encode($arrTracking);
@@ -79,11 +81,33 @@ class ActivityController extends Controller
         foreach($data as $key => $val) {
             $activity_tracking->{$key} = $val;
         }
+        $activity_tracking->external_id_restep = $genId;
 
         $activity_tracking['user_id'] = $users->id;
         $activity_tracking['polyline'] = $polyline;
 
         if($activity_tracking->save()) {
+            $datasArr = [
+                'id' => $genId,
+                'resource_state' => 333,
+                'athlete_id' => $users->id_client,
+                'name' => $activity_tracking->title,
+                'slug' => $activity_tracking->title.'-'.$genId,
+                'distance' => $activity_tracking->distance,
+                'moving_time' => $activity_tracking->moving_time,
+                'elapsed_time' => $activity_tracking->duration,
+                'total_elevation_gain' => $activity_tracking->elevation,
+                'type' => GP::getById($activity_tracking->type_id),
+                'start_date' => date('Y-m-d H:i:s'),
+                'start_date_local' => date('Y-m-d H:i:s'),
+                'timezone' => '(GMT+07:00) Asia/Jakarta',
+                'map_summary_polylin' => $activity_tracking->polyline,
+                'average_speed' => $activity_tracking->avg_speed,
+                'max_speed' => $activity_tracking->max_speed,
+                'action' => 'C'
+            ];
+            // dd($datasArr);
+            $pushDataToApi = RestepService::setactivities_nonstrava($datasArr, $request);
             return Helper::createResponse(200, 'Success', $activity_tracking);
 
         } else {
