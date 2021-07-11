@@ -77,8 +77,9 @@ class RestepService {
                          ->returnResponseObject()
                          ->post();
 
+            // dd($responses);
             $response = $responses->content;
-            if($response->message != "Activities found") throw new CustomException("Ups: silahkan ulangi beberapa saat lagi.");
+            if($response->message != "Activities found") return $responses;
 
             return $response->Data;
         } catch (\Throwable $th) {

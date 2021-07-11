@@ -42,7 +42,10 @@ class ActivityController extends Controller
     public function getListMember(Request $request) {
         $users = User::getUser($request->bearerToken());
         $getDataExternalRestep = RestepService::dispallacts($users->email_client, $request);
-        $mapData = ActivityTracking::mapData($users, $getDataExternalRestep);
+        // dd($getDataExternalRestep);
+        if($getDataExternalRestep->content->message == "Activities found") {
+            $mapData = ActivityTracking::mapData($users, $getDataExternalRestep);
+        }
         $userClientName = UserClient::getName($users->email_client);
         $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('athlete_email', $users->email_client)->orderBy('id', 'DESC')->select('activity_trackings.*', 'global_param.param_name AS type_name')->get();
         
