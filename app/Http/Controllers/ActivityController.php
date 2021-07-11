@@ -97,7 +97,7 @@ class ActivityController extends Controller
                 'moving_time' => $activity_tracking->moving_time,
                 'elapsed_time' => $activity_tracking->duration,
                 'total_elevation_gain' => $activity_tracking->elevation,
-                'type' => GP::getById($activity_tracking->type_id),
+                'type' => GP::getById($activity_tracking->type_id)->param_name,
                 'start_date' => date('Y-m-d H:i:s'),
                 'start_date_local' => date('Y-m-d H:i:s'),
                 'timezone' => '(GMT+07:00) Asia/Jakarta',
