@@ -12,6 +12,7 @@ use App\Helper;
 use App\User;
 use App\Model\ActiveUser;
 use App\Model\UserClient;
+use App\Services\RestepService;
 
 class AuthController extends Controller
 {
@@ -123,5 +124,12 @@ class AuthController extends Controller
         if($user->save()) {
             return Helper::responseData($user);
         }
+    }
+
+    public function refreshToken(Request $request) {
+        $data = RestepService::validate_uid();
+
+        return Helper::responseData($data);
+
     }
 }

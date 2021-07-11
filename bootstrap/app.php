@@ -61,6 +61,7 @@ $app->singleton(
 
 $app->configure('app');
 $app->configure('cors');
+$app->configure('services');
 $app->configure('database');
 
 /*
@@ -103,6 +104,7 @@ $app->middleware([
 
 // $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(\Ixudra\Curl\CurlServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
 

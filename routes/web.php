@@ -15,6 +15,8 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->get('refresh-token', 'Auth\AuthController@refreshToken');
+
 $router->post('login', 'Auth\AuthController@login');
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('register', 'Auth\AuthController@register');
