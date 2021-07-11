@@ -43,7 +43,7 @@ class ActivityController extends Controller
         $users = User::getUser($request->bearerToken());
         $getDataExternalRestep = RestepService::dispallacts($users->email_client, $request);
         // dd($getDataExternalRestep);
-        if($getDataExternalRestep->content->message == "Activities found") {
+        if($getDataExternalRestep) {
             $mapData = ActivityTracking::mapData($users, $getDataExternalRestep);
         }
         $userClientName = UserClient::getName($users->email_client);

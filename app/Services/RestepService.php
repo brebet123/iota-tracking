@@ -79,7 +79,7 @@ class RestepService {
 
             // dd($responses);
             $response = $responses->content;
-            if($response->message != "Activities found") return $responses;
+            if($response->message != "Activities found") return $responses = false;
 
             return $response->Data;
         } catch (\Throwable $th) {
