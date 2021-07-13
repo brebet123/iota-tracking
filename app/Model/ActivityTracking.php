@@ -28,7 +28,7 @@ class ActivityTracking extends CompModel
 
     static function saveMappingData($user, $data) {
         try {
-            $arrPace = [['pace' => floor($data->distance/$data->moving_time), 'time' => floor($data->moving_time)]];
+            $arrPace = $data->moving_time ? [['pace' => floor($data->distance/$data->moving_time), 'time' => floor($data->moving_time)]] : [];
             $dataPace = json_encode($arrPace);
             $insert = new ActivityTracking;
             $insert->user_id = $user->id;
