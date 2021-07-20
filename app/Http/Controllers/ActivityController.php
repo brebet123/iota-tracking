@@ -48,7 +48,7 @@ class ActivityController extends Controller
             $mapData = ActivityTracking::mapData($users, $getDataExternalRestep);
         }
         $userClientName = UserClient::getName($users->email_client);
-        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('athlete_email', $users->email_client)->orderBy('id', 'DESC')->select('activity_trackings.*', 'global_param.param_name AS type_name')->get();
+        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('athlete_email', $users->email_client)->orderBy('id', 'DESC')->select('activity_trackings.*', 'global_param.param_name AS type_name')->paginate();
         
         foreach($activity_tracking as $key => $val) {
             $val->athlete_name = $userClientName;;
@@ -60,7 +60,12 @@ class ActivityController extends Controller
             $val->date = date('Y-m-d H:i:s', strtotime($val->created_at));
         }
 
-        return Helper::responseData($activity_tracking);
+        $pages['page'] = $activity_tracking->currentPage();
+        $pages['perPage'] = $activity_tracking->perPage();
+        $pages['total'] = $activity_tracking->total();
+        $pages['lastPage'] = $activity_tracking->lastPage();
+
+        return Helper::responseData($activity_tracking->items(), $pages);
     }
 
     public function add(Request $request) {
