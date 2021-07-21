@@ -22,6 +22,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('register', 'Auth\AuthController@register');
     $router->get('/activity/get-list', 'ActivityController@getList');
     $router->get('/activity/get-list-member', 'ActivityController@getListMember');
+    $router->get('/activity/get-list-members', 'ActivityController@getListMembers');
     $router->post('/activity/add', 'ActivityController@add');
 });
 

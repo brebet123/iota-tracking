@@ -48,7 +48,7 @@ class ActivityController extends Controller
             $mapData = ActivityTracking::mapData($users, $getDataExternalRestep);
         }
         $userClientName = UserClient::getName($users->email_client);
-        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('athlete_email', $users->email_client)->orderBy('id', 'DESC')->select('activity_trackings.*', 'global_param.param_name AS type_name')->paginate();
+        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('athlete_email', $users->email_client)->orderBy('id', 'DESC')->select('activity_trackings.*', 'global_param.param_name AS type_name')->paginate(100);
         
         foreach($activity_tracking as $key => $val) {
             $val->athlete_name = $userClientName;;
@@ -66,6 +66,34 @@ class ActivityController extends Controller
         $pages['lastPage'] = $activity_tracking->lastPage();
 
         return Helper::responseData($activity_tracking->items(), $pages);
+    }
+
+    public function getListMembers(Request $request) {
+        $users = User::getUser($request->bearerToken());
+        $getDataExternalRestep = RestepService::dispallacts($users->email_client, $request);
+        // dd($getDataExternalRestep);
+        if($getDataExternalRestep) {
+            $mapData = ActivityTracking::mapData($users, $getDataExternalRestep);
+        }
+        $userClientName = UserClient::getName($users->email_client);
+        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('athlete_email', $users->email_client)->orderBy('id', 'DESC')->select('activity_trackings.*', 'global_param.param_name AS type_name')->paginate();
+        
+        foreach($activity_tracking as $key => $val) {
+            $val->athlete_name = $userClientName;;
+            $activity_tracking_decode = Polyline::decode($val->polyline);
+            $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
+            $val->tracking = $activity_tracking_pair;
+            $val->pace_km = isset($val->pace_km) ? json_decode($val->pace_km, true) : null;
+            $val->pace_50m = isset($val->pace_50m) ? json_decode($val->pace_50m, true) : null;
+            $val->date = date('Y-m-d H:i:s', strtotime($val->created_at));
+        }
+
+        $pages['page'] = $activity_tracking->currentPage();
+        $pages['perPage'] = $activity_tracking->perPage();
+        $pages['total'] = $activity_tracking->total();
+        $pages['lastPage'] = $activity_tracking->lastPage();
+
+        return Helper::responseDatas($activity_tracking->items(), $pages);
     }
 
     public function add(Request $request) {

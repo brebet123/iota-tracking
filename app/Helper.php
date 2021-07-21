@@ -19,6 +19,19 @@ class Helper {
         return response()->json($data, 200);
     }
 
+    static function responseDatas($data = false, $paginate = null){
+        if (!$data && [] !== $data) $data = json_decode("{}");
+        if($paginate == null){
+            $data = ['error' => EC::NOTHING,'message' => EM::NONE ,
+            "result" => ["data" => $data, "page" => $paginate]];
+        }else{
+            $data = ['error' => EC::NOTHING,'message' => EM::NONE,
+            "result" => [ "page" => $paginate, "data" => $data,]];
+        }
+
+        return response()->json($data, 200);
+    }
+
     static function createResponse($EC, $EM, $data = false) {
         $ECM = $EC;
 
