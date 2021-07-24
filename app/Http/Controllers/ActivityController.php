@@ -12,9 +12,11 @@ use App\Model\UserClient;
 use App\Model\GlobalParam;
 use App\Services\RestepService;
 use App\Model\GlobalParam AS GP;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class ActivityController extends Controller
-{
+{   
     /**
      * Create a new controller instance.
      *
@@ -28,7 +30,7 @@ class ActivityController extends Controller
     public function getList(Request $request) {
         $users = User::getUser( $request->bearerToken());
         $userClientName = UserClient::getName($users->email_client);
-        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('activity_trackings_code', $request->activity_trackings_code)->select('activity_trackings.*', 'global_param.param_name AS type_name')->first();
+        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id', 'image')->where('activity_trackings_code', $request->activity_trackings_code)->select('activity_trackings.*', 'global_param.param_name AS type_name')->first();
         $activity_tracking->athlete_name = $userClientName;
         $activity_tracking_decode = Polyline::decode($activity_tracking->polyline);
         $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
@@ -36,6 +38,7 @@ class ActivityController extends Controller
         $activity_tracking->pace_km = isset($activity_tracking->pace_km) ? json_decode($activity_tracking->pace_km, true) : null;
         $activity_tracking->pace_50m = isset($activity_tracking->pace_50m) ? json_decode($activity_tracking->pace_50m, true) : null;
         $activity_tracking->date = date('Y-m-d H:i:s', strtotime($activity_tracking->created_at));
+        $activity_tracking->image = $activity_tracking->image ? url('uploads/img/'.$users->id.'/IMG-ACT-'.$activity_tracking->id.'.jpg') : null;
 
         return Helper::responseData($activity_tracking);
     }
@@ -110,6 +113,7 @@ class ActivityController extends Controller
         unset($data['api_token']);
         unset($data['tracking']);
         unset($data['type_act']);
+        unset($data['image']);
 
         foreach($data as $key => $val) {
             $activity_tracking->{$key} = $val;
@@ -120,6 +124,15 @@ class ActivityController extends Controller
         $activity_tracking['polyline'] = $polyline;
 
         if($activity_tracking->save()) {
+            if($request->image) {
+                $path = 'uploads/img/'.$users->id;
+                if (!File::exists($path)) {File::makeDirectory('uploads/img/'.$users->id, 0775, true);}
+                $imageName = 'IMG-ACT-'.$activity_tracking->id.'.'.'jpg';
+                File::put('uploads/img/'.$users->id.'/' . $imageName, base64_decode($request->image));
+                $activity_tracking->image = $imageName;
+                $activity_tracking->save();
+            }
+
             $datasArr = [
                 'id' => $genId,
                 'resource_state' => 333,
