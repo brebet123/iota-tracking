@@ -38,7 +38,7 @@ class ActivityController extends Controller
         $activity_tracking->pace_km = isset($activity_tracking->pace_km) ? json_decode($activity_tracking->pace_km, true) : null;
         $activity_tracking->pace_50m = isset($activity_tracking->pace_50m) ? json_decode($activity_tracking->pace_50m, true) : null;
         $activity_tracking->date = date('Y-m-d H:i:s', strtotime($activity_tracking->created_at));
-        $activity_tracking->image = $activity_tracking->image ? url('uploads/img/'.$users->id.'/IMG-ACT-'.$activity_tracking->id.'.jpg') : null;
+        $activity_tracking->image = $activity_tracking->image ? url('uploads/img/'.$users->id.'/IMG-ACT-'.$activity_tracking->id.'.jpg') : '';
 
         return Helper::responseData($activity_tracking);
     }
@@ -61,6 +61,7 @@ class ActivityController extends Controller
             $val->pace_km = isset($val->pace_km) ? json_decode($val->pace_km, true) : null;
             $val->pace_50m = isset($val->pace_50m) ? json_decode($val->pace_50m, true) : null;
             $val->date = date('Y-m-d H:i:s', strtotime($val->created_at));
+            $val->image = $val->image ? url('uploads/img/'.$users->id.'/IMG-ACT-'.$val->id.'.jpg') : '';
         }
 
         $pages['page'] = $activity_tracking->currentPage();
@@ -89,6 +90,7 @@ class ActivityController extends Controller
             $val->pace_km = isset($val->pace_km) ? json_decode($val->pace_km, true) : null;
             $val->pace_50m = isset($val->pace_50m) ? json_decode($val->pace_50m, true) : null;
             $val->date = date('Y-m-d H:i:s', strtotime($val->created_at));
+            $val->image = $val->image ? url('uploads/img/'.$users->id.'/IMG-ACT-'.$val->id.'.jpg') : '';
         }
 
         $pages['page'] = $activity_tracking->currentPage();
