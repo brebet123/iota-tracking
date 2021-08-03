@@ -91,6 +91,12 @@ class ActivityController extends Controller
             $val->pace_50m = isset($val->pace_50m) ? json_decode($val->pace_50m, true) : null;
             $val->date = date('Y-m-d H:i:s', strtotime($val->created_at));
             $val->image = $val->image ? url('uploads/img/'.$users->id.'/IMG-ACT-'.$val->id.'.jpg') : '';
+            if($val->images) {
+                foreach(json_decode($val->images) as $vals) {
+                    $images[] = url('uploads/img/'.$users->id.'/'.$vals);
+                }
+            }
+            $val->images = $images;
         }
 
         $pages['page'] = $activity_tracking->currentPage();
@@ -116,6 +122,7 @@ class ActivityController extends Controller
         unset($data['tracking']);
         unset($data['type_act']);
         unset($data['image']);
+        unset($data['images']);
 
         foreach($data as $key => $val) {
             $activity_tracking->{$key} = $val;
@@ -132,6 +139,19 @@ class ActivityController extends Controller
                 $imageName = 'IMG-ACT-'.$activity_tracking->id.'.'.'jpg';
                 File::put('uploads/img/'.$users->id.'/' . $imageName, base64_decode($request->image));
                 $activity_tracking->image = $imageName;
+                $activity_tracking->save();
+            }
+
+            if($request->images) {
+                foreach($request->images as $key => $val) {
+                    $path = 'uploads/img/'.$users->id;
+                    if (!File::exists($path)) {File::makeDirectory('uploads/img/'.$users->id, 0775, true);}
+                    $imageName = 'IMG-ACT-'.$activity_tracking->id.'-'.($key+1).'.'.'jpg';
+                    File::put('uploads/img/'.$users->id.'/' . $imageName, base64_decode($val));
+                    $imageNames[] = $imageName;
+                }
+
+                $activity_tracking->images = json_encode($imageNames);
                 $activity_tracking->save();
             }
 
