@@ -91,6 +91,7 @@ class ActivityController extends Controller
             $val->pace_50m = isset($val->pace_50m) ? json_decode($val->pace_50m, true) : null;
             $val->date = date('Y-m-d H:i:s', strtotime($val->created_at));
             $val->image = $val->image ? url('uploads/img/'.$users->id.'/IMG-ACT-'.$val->id.'.jpg') : '';
+            $images = [];
             if($val->images) {
                 foreach(json_decode($val->images) as $vals) {
                     $images[] = url('uploads/img/'.$users->id.'/'.$vals);
