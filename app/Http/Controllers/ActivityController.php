@@ -39,6 +39,13 @@ class ActivityController extends Controller
         $activity_tracking->pace_50m = isset($activity_tracking->pace_50m) ? json_decode($activity_tracking->pace_50m, true) : null;
         $activity_tracking->date = date('Y-m-d H:i:s', strtotime($activity_tracking->created_at));
         $activity_tracking->image = $activity_tracking->image ? url('uploads/img/'.$users->id.'/IMG-ACT-'.$activity_tracking->id.'.jpg') : '';
+        $images = [];
+        if($activity_tracking->images) {
+            foreach(json_decode($activity_tracking->images) as $vals) {
+                $images[] = url('uploads/img/'.$users->id.'/'.$vals);
+            }
+        }
+        $activity_tracking->images = $images;
 
         return Helper::responseData($activity_tracking);
     }
