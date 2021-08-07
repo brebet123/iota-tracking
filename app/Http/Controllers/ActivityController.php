@@ -221,7 +221,6 @@ class ActivityController extends Controller
 
     public function getLeaderBoard(Request $request) {
         try {
-            $limit = $request->limit ? $request->limit : 10;
             $checkLog = LogDataExternal::cekData();
 
             if($checkLog) {
@@ -234,7 +233,7 @@ class ActivityController extends Controller
                 }
             }
 
-            $result = LeaderBoardMirror::paginate($limit);
+            $result = LeaderBoardMirror::getData($request);
 
             $pages['page'] = $result->currentPage();
             $pages['perPage'] = $result->perPage();
