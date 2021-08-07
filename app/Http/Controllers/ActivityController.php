@@ -10,6 +10,8 @@ use App\Helper;
 use App\Polyline;
 use App\Model\UserClient;
 use App\Model\GlobalParam;
+use App\Model\LogDataExternal;
+use App\Model\LeaderBoardMirror;
 use App\Services\RestepService;
 use App\Model\GlobalParam AS GP;
 use Illuminate\Support\Facades\File;
@@ -215,5 +217,34 @@ class ActivityController extends Controller
         $arr = [];
         $activity_tracking_decode = Polyline::decode($arr);
         $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
+    }
+
+    public function getLeaderBoard(Request $request) {
+        try {
+            $limit = $request->limit ? $request->limit : 10;
+            $checkLog = LogDataExternal::cekData();
+
+            if($checkLog) {
+                LeaderBoardMirror::truncate();
+                $getDataExternalRestep = RestepService::getLeaderBoard();
+                $dataChunk = array_chunk($getDataExternalRestep, 200);
+
+                foreach($dataChunk as $val) {
+                    $insertBulk = LeaderBoardMirror::insert(json_decode(json_encode($val),true));
+                }
+            }
+
+            $result = LeaderBoardMirror::paginate($limit);
+
+            $pages['page'] = $result->currentPage();
+            $pages['perPage'] = $result->perPage();
+            $pages['total'] = $result->total();
+            $pages['lastPage'] = $result->lastPage();
+
+            return Helper::responseDatas($result->items(), $pages);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

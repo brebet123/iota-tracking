@@ -135,6 +135,27 @@ class RestepService {
         }
     }
 
+    static function getLeaderBoard() {
+        try {
+            $responses = Curl::to(config('services.restep.url').'/ldboarda')
+                        ->withContentType('application/json')
+                        ->returnResponseObject()
+                        ->withOption('USERPWD', config('services.restep.user').':'.config('services.restep.password'))
+                        ->withData(["ID_App" => "RESTEP.ID", 
+                                    "Data" => [["refresh_token" => self::validate_uid()->refresh_token]]
+                                ])
+                        ->asJson()
+                        ->returnResponseObject()
+                        ->post();
+            $response = $responses->content;
+            if($response->status != "success") return $responses = false;
+
+            return $response->Data;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     static function validate_uid()
     {
         try {

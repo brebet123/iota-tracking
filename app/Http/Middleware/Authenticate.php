@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use App\Constants\ErrorCode as EC;
 use App\Constants\ErrorMessage as EM;
-use App\Helper;
+use Firebase\JWT\JWT;
 
 class Authenticate
 {
@@ -41,6 +41,9 @@ class Authenticate
         if ($this->auth->guard($guard)->guest()) {
             return Helper::createResponse(EC::UNAUTHORIZED, EM::UNAUTHORIZED);
         }
+        $token = $request->bearerToken();
+        $credentials = JWT::decode($token, 'iota-tracking', array('HS256'));
+        $request->current_user = $credentials->sub;
 
         return $next($request);
     }
