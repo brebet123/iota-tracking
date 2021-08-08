@@ -223,7 +223,7 @@ class ActivityController extends Controller
         try {
             $checkLog = LogDataExternal::cekData();
 
-            if($checkLog) {
+            if($checkLog || $request->update_data) {
                 LeaderBoardMirror::truncate();
                 $getDataExternalRestep = RestepService::getLeaderBoard();
                 $dataChunk = array_chunk($getDataExternalRestep, 200);

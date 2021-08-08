@@ -18,6 +18,7 @@ class LeaderBoardMirror extends CompModel
                     $query->orWhere('socmed_name', 'iLike', '%'.$param->where_value.'%');
                 }
             })
+            ->orderBy('id', 'ASC')
             ->paginate($limit);
 
         } catch (\Throwable $th) {
