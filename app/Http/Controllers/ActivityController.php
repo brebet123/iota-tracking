@@ -104,7 +104,7 @@ class ActivityController extends Controller
                              ->paginate();
         
         foreach($activity_tracking as $key => $val) {
-            $val->athlete_name = $userClientName;;
+            $val->athlete_name = $userClientName;
             $activity_tracking_decode = Polyline::decode($val->polyline);
             $activity_tracking_pair = Polyline::pair($activity_tracking_decode);
             $val->tracking = $activity_tracking_pair;
