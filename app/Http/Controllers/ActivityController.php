@@ -89,7 +89,19 @@ class ActivityController extends Controller
             $mapData = ActivityTracking::mapData($users, $getDataExternalRestep);
         }
         $userClientName = UserClient::getName($users->email_client);
-        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')->where('athlete_email', $users->email_client)->orderBy('id', 'DESC')->select('activity_trackings.*', 'global_param.param_name AS type_name')->paginate();
+        $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id')
+                             ->select('activity_trackings.*', 'global_param.param_name AS type_name')
+                             ->where('athlete_email', $users->email_client)
+                             ->where(function($query) use($request) {
+                                 if($request->race_id) {
+                                     $query->where('race_id', $request->race_id);
+                                     
+                                } else {
+                                    $query->whereNull('race_id');
+                                }
+                             })
+                             ->orderBy('id', 'DESC')
+                             ->paginate();
         
         foreach($activity_tracking as $key => $val) {
             $val->athlete_name = $userClientName;;
