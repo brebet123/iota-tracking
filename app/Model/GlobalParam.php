@@ -31,10 +31,16 @@ class GlobalParam extends CompModel
         }
     }
 
-    static function getById($id) {
+    static function getById($id, $param_services) {
         try {
             $result = GlobalParam::find($id);
-            
+
+            if($param_services == 'services_restep') {
+                if($result->param_code == 'BIKE') $result->param_name = 'Ride';
+                if($result->param_code == 'RUN') $result->param_name = 'Run';
+                if($result->param_code == 'WALK') $result->param_name = 'Walk';
+            }
+
             return $result;
 
         } catch (\Throwable $th) {
