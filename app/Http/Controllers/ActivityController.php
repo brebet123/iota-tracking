@@ -133,13 +133,12 @@ class ActivityController extends Controller
         $data = $request->all();
         $users = User::getUser( $request->bearerToken());
         $genId = RestepService::generateId();
-        // dd($users);
         $activity_tracking = new ActivityTracking;
         $arrTracking = $request->tracking;
         $polyline = Polyline::encode($arrTracking);
         $data['pace_km'] = isset($data['pace_km']) ? json_encode($data['pace_km']) : null;
         $data['pace_50m'] = isset($data['pace_50m']) ? json_encode($data['pace_50m']) : null;
-        $data['type_id'] = isset($data['type_act']) ? GlobalParam::getId($data['type_act']) : null;
+        // $data['type_id'] = isset($data['type_act']) ? GlobalParam::getId($data['type_act']) : null;
         unset($data['api_token']);
         unset($data['tracking']);
         unset($data['type_act']);
