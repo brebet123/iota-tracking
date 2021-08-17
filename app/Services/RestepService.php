@@ -113,7 +113,6 @@ class RestepService {
     static function setactivities_nonstrava($data, $request)
     {
         try {
-            dd($data);
             $responses = Curl::to(config('services.restep.url').'/setactivities_nonstrava')
                          ->withContentType('application/json')
                          ->returnResponseObject()
