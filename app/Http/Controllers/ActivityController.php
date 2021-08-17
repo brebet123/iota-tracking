@@ -31,7 +31,7 @@ class ActivityController extends Controller
 
     public function getList(Request $request) {
         $users = User::getUser( $request->bearerToken());
-        $userClientName = UserClient::getName($users->email_client);
+        $userClientName = UserClient::getName($request->current_user->email_client);
         $activity_tracking = ActivityTracking::leftJoin('global_param', 'activity_trackings.type_id', 'global_param.id', 'image')->where('activity_trackings_code', $request->activity_trackings_code)->select('activity_trackings.*', 'global_param.param_name AS type_name')->first();
         $activity_tracking->athlete_name = $userClientName;
         $activity_tracking_decode = Polyline::decode($activity_tracking->polyline);

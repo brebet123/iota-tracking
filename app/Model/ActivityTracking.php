@@ -48,7 +48,7 @@ class ActivityTracking extends CompModel
             $insert->moving_time = $data->moving_time;
             $insert->external_id_restep = $data->id;
             $insert->created_at = date('Y-m-d H:i:s', strToTime($data->start_date_local));
-            $insert->race_id = $data->race_id;
+            $insert->race_id = isset($data->race_id) ? $data->race_id : null;
             $insert->save();
 
         } catch (\Throwable $th) {
