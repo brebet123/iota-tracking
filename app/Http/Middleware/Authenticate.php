@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 use App\Constants\ErrorCode as EC;
 use App\Constants\ErrorMessage as EM;
 use Firebase\JWT\JWT;
+use App\Helper;
 
 class Authenticate
 {
