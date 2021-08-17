@@ -32,7 +32,7 @@ class RestepService {
 
             $response = curl_exec($curl);
             curl_close($curl);
-            if(!$response) throw new CustomException("Ups: silahkan ulangi beberapa saat lagi.");
+            // if(!$response) throw new CustomException("Ups: silahkan ulangi beberapa saat lagi.");
             if(!json_decode($response)->success) throw new CustomException(json_decode($response)->message);
             return json_decode($response)->token;
 
@@ -54,7 +54,7 @@ class RestepService {
                          ->post();
 
             $response = $responses->content;
-            if($response->status != "success") throw new CustomException("Ups: silahkan ulangi beberapa saat lagi.");
+            // if($response->status != "success") throw new CustomException("Ups: silahkan ulangi beberapa saat lagi.");
 
             return $response->Data;
         } catch (\Throwable $th) {
@@ -167,7 +167,7 @@ class RestepService {
                          ->post();
 
             $response = json_decode($responses->content);
-            if($response->status != "success") throw new CustomException("Ups: silahkan ulangi beberapa saat lagi.");
+            // if($response->status != "success") throw new CustomException("Ups: silahkan ulangi beberapa saat lagi.");
 
             return $response;
         } catch (\Throwable $th) {
