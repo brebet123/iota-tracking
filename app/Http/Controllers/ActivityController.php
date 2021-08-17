@@ -194,7 +194,8 @@ class ActivityController extends Controller
                 'map_summary_polylin' => $activity_tracking->polyline,
                 'average_speed' => $activity_tracking->avg_speed,
                 'max_speed' => $activity_tracking->max_speed,
-                'action' => 'C'
+                'race_id' => $activity_tracking->race_id,
+                'action' => 'C',
             ];
             // dd($datasArr);
             $pushDataToApi = RestepService::setactivities_nonstrava($datasArr, $request);
