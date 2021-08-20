@@ -6,6 +6,7 @@ use App\Model\ActivityTracking;
 use App\Constants\ErrorCode as EC;
 use App\Constants\ErrorMessage as EM;
 use App\User;
+use DB;
 use App\Helper;
 use App\Polyline;
 use App\Model\UserClient;
@@ -96,8 +97,6 @@ class ActivityController extends Controller
                                  if($request->race_id) {
                                      $query->where('race_id', $request->race_id);
                                      
-                                } else {
-                                    $query->whereNull('race_id');
                                 }
                              })
                              ->orderBy('id', 'DESC')
@@ -238,6 +237,7 @@ class ActivityController extends Controller
 
             if($checkLog || $request->update_data) {
                 LeaderBoardMirror::truncate();
+                DB::select('ALTER SEQUENCE "IOTRC001".leader_board_mirror_id_seq RESTART WITH 1');
                 $getDataExternalRestep = RestepService::getLeaderBoard();
                 $dataChunk = array_chunk($getDataExternalRestep, 200);
 
