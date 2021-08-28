@@ -25,7 +25,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/activity/get-list-members', 'ActivityController@getListMembers');
     $router->post('/activity/add', 'ActivityController@add');
     $router->get('get-leader-board', 'ActivityController@getLeaderBoard');
-    $router->get('get-view-history', 'ActivityController@getViewHistory');
+    $router->get('get-view-shop-history', 'ActivityController@getViewHistory');
 });
 
 $router->group(['middleware' => 'authClient'], function () use ($router) {
