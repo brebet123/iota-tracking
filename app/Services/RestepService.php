@@ -174,4 +174,27 @@ class RestepService {
             throw $th;
         }
     }
+
+    static function viewshophistory($email)
+    {
+        try {
+            $responses = Curl::to(config('services.restep.url').'/shop/viewshophistory')
+                         ->withContentType('application/json')
+                         ->returnResponseObject()
+                         ->withOption('USERPWD', config('services.restep.user').':'.config('services.restep.password'))
+                         ->withData(["ID_App" => "RESTEP.ID", 
+                                    "Data" => [["refresh_token" => self::validate_uid()->refresh_token]],
+                                    'DataUser' => [["useremail" => $email]]
+                                ])
+                         ->asJson()
+                         ->returnResponseObject()
+                         ->post();
+
+            $response = $responses->content;
+
+            return $response;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

@@ -254,7 +254,68 @@ class ActivityController extends Controller
             $pages['lastPage'] = $result->lastPage();
 
             return Helper::responseDatas($result->items(), $pages);
+            
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    
+    public function getViewHistory(Request $request) {
+        try {
+            $data = RestepService::viewshophistory($request->current_user->email_client);
 
+            if($data->message == 'Data empty') {
+                $datas = [];
+            
+            } else {
+                $dataCollect = collect($data->Data)->groupBy('shipping_code');
+                foreach($dataCollect as $key => $val) {
+                    foreach($data->Data as $keys => $vals) {
+                        if($key == $vals->shipping_code) {
+                            $items[] = ['product_name' => $vals->product_name,
+                            'slug' => $vals->slug,
+                            'main_image' => $vals->main_image,
+                            'price' => $vals->price,
+                            'order_id' => $vals->order_id,
+                            'order_title' => $vals->order_title,
+                            'product_id' => $vals->product_id,
+                            'qty' => $vals->qty,
+                            'buy_code' => $vals->buy_code];
+                        }
+                    }
+    
+                    $datas[] = ['shipping_code' => $key,
+                    'no_resi' => $val[0]->no_resi,
+                    'buy_date' => $val[0]->buy_date,
+                    'athlete_email' => $val[0]->athlete_email,
+                    'gross_amount' => $val[0]->gross_amount,
+                    'firstname' => $val[0]->firstname,
+                    'lastname' => $val[0]->lastname,
+                    'buyer_email' => $val[0]->buyer_email,
+                    'phone' => $val[0]->phone,
+                    'transaction_status' => $val[0]->transaction_status,
+                    'payment_type' => $val[0]->payment_type,
+                    'card_type' => $val[0]->card_type,
+                    'bank' => $val[0]->bank,
+                    'courier_service' => $val[0]->courier_service,
+                    'received_by_athlete' => $val[0]->received_by_athlete,
+                    'shipping_fullname' => $val[0]->shipping_fullname,
+                    'shipping_phone_no' => $val[0]->shipping_phone_no,
+                    'shipping_address_01' => $val[0]->shipping_address_01,
+                    'shipping_address_02' => $val[0]->shipping_address_02,
+                    'shipping_province_name' => $val[0]->shipping_province_name,
+                    'shipping_city_name' => $val[0]->shipping_city_name,
+                    'shipping_subdistrict_name' => $val[0]->shipping_subdistrict_name,
+                    'shipping_postcode' => $val[0]->shipping_postcode,
+                    'items' => $items,
+                    ] ;
+    
+                    $items = [];
+                }
+            }
+
+            return Helper::responseData($datas);
+            
         } catch (\Throwable $th) {
             throw $th;
         }
