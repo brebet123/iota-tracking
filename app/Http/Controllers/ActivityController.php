@@ -286,6 +286,8 @@ class ActivityController extends Controller
     
                     $datas[] = ['shipping_code' => $key,
                     'no_resi' => $val[0]->no_resi,
+                    'no_resi_date' => $val[0]->no_resi_date,
+                    'no_resi_note' => $val[0]->no_resi_note,
                     'buy_date' => $val[0]->buy_date,
                     'athlete_email' => $val[0]->athlete_email,
                     'gross_amount' => $val[0]->gross_amount,
