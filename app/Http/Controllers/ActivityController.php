@@ -296,6 +296,8 @@ class ActivityController extends Controller
                     'buyer_email' => $val[0]->buyer_email,
                     'phone' => $val[0]->phone,
                     'transaction_status' => $val[0]->transaction_status,
+                    'transaction_time' => $val[0]->transaction_time,
+                    'settlement_time' => $val[0]->settlement_time,
                     'payment_type' => $val[0]->payment_type,
                     'card_type' => $val[0]->card_type,
                     'bank' => $val[0]->bank,
