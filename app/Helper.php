@@ -6,14 +6,18 @@ use App\Constants\ErrorCode as EC;
 use App\Constants\ErrorMessage as EM;
 
 class Helper {
-    static function responseData($data = false, $paginate = null){
+    static function responseData($data = false, $paginate = null, $distance = null) {
+        // dd($distance);
         if (!$data && [] !== $data) $data = json_decode("{}");
-        if($paginate == null){
-            $data = ['error' => EC::NOTHING,'message' => EM::NONE ,
-            "data" => $data ];
+        if($paginate == null && $distance == null) {
+            $data = ['error' => EC::NOTHING,'message' => EM::NONE , "data" => $data ];
+
+        }elseif($distance) {
+            $data = ['error' => EC::NOTHING,'message' => EM::NONE, "total_distance" => $distance, "data" => $data ];
+
+        
         }else{
-            $data = ['error' => EC::NOTHING,'message' => EM::NONE,'page' => $paginate,
-                    "data" => $data ];
+            $data = ['error' => EC::NOTHING,'message' => EM::NONE,'page' => $paginate, "data" => $data ];
         }
 
         return response()->json($data, 200);

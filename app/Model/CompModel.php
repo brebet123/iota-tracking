@@ -5,7 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use App;
 use User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class CompModel extends Model
 {

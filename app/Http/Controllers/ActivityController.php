@@ -6,7 +6,7 @@ use App\Model\ActivityTracking;
 use App\Constants\ErrorCode as EC;
 use App\Constants\ErrorMessage as EM;
 use App\User;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Helper;
 use App\Polyline;
 use App\Model\UserClient;
@@ -16,7 +16,7 @@ use App\Model\LeaderBoardMirror;
 use App\Services\RestepService;
 use App\Model\GlobalParam AS GP;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
+use App\Model\MstRace;
 
 class ActivityController extends Controller
 {   
@@ -320,6 +320,21 @@ class ActivityController extends Controller
 
             return Helper::responseData($datas);
             
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function getListRace(Request $request) {
+        try {
+            $data = MstRace::getGeligaRace($request);
+
+            $countDistance = 0;
+            foreach($data as $val) {
+                $countDistance += $val->total_distance;
+            }
+
+            return Helper::responseData($data, null, $countDistance);
         } catch (\Throwable $th) {
             throw $th;
         }
