@@ -17,6 +17,8 @@ use App\Services\RestepService;
 use App\Model\GlobalParam AS GP;
 use Illuminate\Support\Facades\File;
 use App\Model\MstRace;
+use App\Model\ActNonStrava;
+use App\Model\ActStrava;
 
 class ActivityController extends Controller
 {   
@@ -338,5 +340,30 @@ class ActivityController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public function updateInsertDataRestep(Request $request) {
+        // dd(ActivityTracking::count());
+        $idRstep = ActivityTracking::select('athlete_id', 'id', 'external_id_restep', 'title')->whereDate('created_at', '2021-09-01')->whereNotNull('external_id_restep')->orderBy('id', 'DESC')->chunk(2500, function($data) {
+            foreach($data as $key => $val) {
+                ActNonStrava::where('id', $val->external_id_restep)->update(['athlete_id' => $val->athlete_id]);
+                // $cekNonStrava = ActNonStrava::cekData($val->external_id_restep);
+    
+                // if($cekNonStrava) {
+                //     if($cekNonStrava->athlete_id == $val->athlete_id) {
+                //         ActNonStrava::updateDatas($val);
+                //     }
+                
+                // } else {
+                //     $cekStrava = ActNonStrava::cekData($val->external_id_restep);
+    
+                //     if($cekStrava) {
+                //         if($cekStrava->athlete_id == $val->athlete_id) {
+                //             ActNonStrava::updateDatas($val);
+                //         }
+                //     }
+                // }
+            }
+        });
     }
 }

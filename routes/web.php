@@ -35,3 +35,4 @@ $router->group(['middleware' => 'authClient'], function () use ($router) {
 });
 
 $router->get('/polyline/tes', 'ActivityController@tes');
+$router->get('/getact', 'ActivityController@updateInsertDataRestep');
