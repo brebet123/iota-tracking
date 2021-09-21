@@ -179,7 +179,7 @@ class ActivityController extends Controller
             $datasArr = [
                 'id' => $genId,
                 'resource_state' => 333,
-                'athlete_id' => $users->id_client,
+                'athlete_id' => $activity_tracking->athlete_id,
                 'name' => $activity_tracking->title,
                 'slug' => $activity_tracking->title.'-'.$genId,
                 'distance' => $activity_tracking->distance,
