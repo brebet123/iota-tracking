@@ -336,7 +336,18 @@ class ActivityController extends Controller
                 $idRace[] = $val->race_id;
             }
 
+            foreach($idRace as $val) {
+                $getDataStravaPerRace = RsRaceAthlete::getGeligaRacePerRace($val);
+                $getDistancePerRace = 0;
+
+                foreach($getDataStravaPerRace as $vals) {
+                    $getDistancePerRace += RsMemberActivity::getDistance($vals);
+                    $getDistancePerRaceArr[$val] = $getDistancePerRace;
+                }
+            }
+            
             $getDataStrava = RsRaceAthlete::getGeligaRace($idRace);
+
             $getDistance = 0;
             foreach($getDataStrava as $val) {
                 $getDistance += RsMemberActivity::getDistance($val);
@@ -345,6 +356,7 @@ class ActivityController extends Controller
             $countDistance = $getDistance;
             foreach($data as $val) {
                 $countDistance += $val->total_distance;
+                $val->total_distance = $val->total_distance + $getDistancePerRaceArr[$val->race_id];
             }
 
             return Helper::responseData($data, null, $countDistance);
