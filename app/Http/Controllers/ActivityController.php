@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\File;
 use App\Model\MstRace;
 use App\Model\ActNonStrava;
 use App\Model\ActStrava;
+use App\Model\RsMemberActivity;
+use App\Model\RsRaceAthlete;
 
 class ActivityController extends Controller
 {   
@@ -330,8 +332,17 @@ class ActivityController extends Controller
     public function getListRace(Request $request) {
         try {
             $data = MstRace::getGeligaRace($request);
+            foreach($data as $val) {
+                $idRace[] = $val->race_id;
+            }
 
-            $countDistance = 0;
+            $getDataStrava = RsRaceAthlete::getGeligaRace($idRace);
+            $getDistance = 0;
+            foreach($getDataStrava as $val) {
+                $getDistance += RsMemberActivity::getDistance($val);
+            }
+
+            $countDistance = $getDistance;
             foreach($data as $val) {
                 $countDistance += $val->total_distance;
             }
