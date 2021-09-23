@@ -18,9 +18,11 @@ use App\Model\GlobalParam AS GP;
 use Illuminate\Support\Facades\File;
 use App\Model\MstRace;
 use App\Model\ActNonStrava;
-use App\Model\ActStrava;
 use App\Model\RsMemberActivity;
 use App\Model\RsRaceAthlete;
+use App\Model\RsMemberAuthenticatedAthlete;
+use App\Model\RsMemberAuthenticatedAthleteNonStrava;
+
 
 class ActivityController extends Controller
 {   
@@ -388,5 +390,46 @@ class ActivityController extends Controller
                 // }
             }
         });
+    }
+
+    public function leaderBoard(Request $request) {
+        try {
+            $data = MstRace::getGeligaRace($request);
+            foreach($data as $val) {
+                $idRace[] = $val->race_id;
+            }
+
+            $dataRestep = MstRace::getListGeligaRace();
+
+            foreach($idRace as $val) {
+                $getDataStravaPerRace = RsRaceAthlete::getGeligaRacePerRace($val);
+
+                foreach($getDataStravaPerRace as $vals) {
+                    $getDistancePerRace[$vals->race_id][$vals->athlete_id] = RsMemberActivity::getDistance($vals);
+                }
+            }
+
+            foreach($dataRestep as $indexs => $values) {
+                $getDistancePerRace[$values['race_id']][$values['athlete_id']] =  $values['total_distance'];
+            }
+
+            foreach ($getDistancePerRace as $key => $value) {
+                $arrPerRace = collect($value)->sortDesc()->take(10);
+                $mstRace = MstRace::find($key);
+                foreach ($arrPerRace as $index => $value) {
+                    $members = RsMemberAuthenticatedAthlete::find($index);
+                    
+                    if(!$members) $members = RsMemberAuthenticatedAthleteNonStrava::join('rs_member_restep as rmr', 'rs_member_authenticated_athlete_non_strava.athlete_email', 'rmr.athlete_email')->where('rs_member_authenticated_athlete_non_strava.id', $index)->select('rmr.socmed_name AS firstname', 'lastname', 'profile')->first();
+                    $leaderBoard[] = ['athlete_id' => $index, 'name' => $members->firstname, 'last_name' => $members->lastname, 'profile_picture' => $members->profile, 'total_distance' => $value];
+                }
+                $datas[] = ['race_id' => $key, 'race_name' => $mstRace->race_name, 'leaderBoard' => $leaderBoard];
+            }
+
+
+            return Helper::responseData($datas, null);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
