@@ -416,6 +416,7 @@ class ActivityController extends Controller
             foreach ($getDistancePerRace as $key => $value) {
                 $arrPerRace = collect($value)->sortDesc()->take(10);
                 $mstRace = MstRace::find($key);
+                $leaderBoard = [];
                 foreach ($arrPerRace as $index => $value) {
                     $members = RsMemberAuthenticatedAthlete::find($index);
                     
