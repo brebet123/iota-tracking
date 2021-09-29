@@ -63,6 +63,7 @@ $app->configure('app');
 $app->configure('cors');
 $app->configure('services');
 $app->configure('database');
+$app->configure('logviewer');
 
 /*
 |--------------------------------------------------------------------------
@@ -107,6 +108,7 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(\Ixudra\Curl\CurlServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
+$app->register(\Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

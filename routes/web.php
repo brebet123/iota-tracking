@@ -37,3 +37,7 @@ $router->group(['middleware' => 'authClient'], function () use ($router) {
 
 $router->get('/polyline/tes', 'ActivityController@tes');
 $router->get('/getact', 'ActivityController@updateInsertDataRestep');
+
+$router->group(['namespace' => '\Rap2hpoutre\LaravelLogViewer'], function() use ($router) {
+    $router->get('logs', 'LogViewerController@index');
+});
