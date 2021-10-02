@@ -26,7 +26,7 @@ class RsRaceAthlete extends Model
             $result = RsRaceAthlete::where('race_id', $param)
                       ->join('rs_member_authenticated_athlete as ms', 'rs_race_athlete.athlete_id', 'ms.id')
                       ->join('rs_race as rr', 'rs_race_athlete.race_id', 'rr.id')
-                      ->select('rs_race_athlete.id', 'rs_race_athlete.athlete_id', 'rs_race_athlete.race_id', 'rs_race_athlete.created_at', 'rr.to_date')
+                      ->select('rs_race_athlete.id', 'rs_race_athlete.athlete_id', 'rs_race_athlete.race_id', 'rs_race_athlete.created_at', 'rr.to_date', 'rr.race_activity_type')
                       ->get();
 
         return $result;

@@ -15,6 +15,7 @@ class RsMemberActivity extends Model
         $result = RsMemberActivity::where('athlete_id', $param->athlete_id)
                   ->whereDate('start_date', '>=', $joindate->addHours(12))
                   ->whereDate('start_date', '<=', $param->to_date)
+                  ->where('type', $param->race_activity_type)
                   ->sum('distance');
 
         return $result;

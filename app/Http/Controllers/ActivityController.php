@@ -426,7 +426,6 @@ class ActivityController extends Controller
                 $datas[] = ['race_id' => $key, 'race_name' => $mstRace->race_name, 'leaderBoard' => $leaderBoard];
             }
 
-
             return Helper::responseData($datas, null);
 
         } catch (\Throwable $th) {
