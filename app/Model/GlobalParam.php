@@ -47,4 +47,8 @@ class GlobalParam extends CompModel
             throw $th;
         }
     }
+
+    static function version() {
+        return GlobalParam::select('id', 'param_type', 'param_name', 'param_code')->where('param_type', 'VERSION')->get();
+    }
 }

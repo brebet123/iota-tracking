@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Exceptions\CustomException;
+use App\Services\RestepService;
 use App\Helper;
 use App\User;
 use App\Model\ActiveUser;
 use App\Model\UserClient;
-use App\Services\RestepService;
+use App\Model\GlobalParam AS GP;
 
 class AuthController extends Controller
 {
@@ -29,9 +30,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
-            
             $user = User::where('api_token', $request->app_key)->first();
-            
+
             if(!$user) throw new CustomException("Token tidak terdaftar");
             $password = isset($user->password) ?  $user->password : GC::IS_NULL;
             $profile = clone $user;
@@ -131,5 +131,16 @@ class AuthController extends Controller
 
         return Helper::responseData($data);
 
+    }
+
+    public function version(Request $request) {
+        try {
+            $data = GP::version();
+
+            return Helper::responseData($data);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
