@@ -347,9 +347,7 @@ class ActivityController extends Controller
                     $getDistancePerRaceArr[$val] = $getDistancePerRace;
                 }
             }
-            
             $getDataStrava = RsRaceAthlete::getGeligaRace($idRace);
-
             $getDistance = 0;
             foreach($getDataStrava as $val) {
                 $getDistance += RsMemberActivity::getDistance($val);
