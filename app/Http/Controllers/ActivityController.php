@@ -203,7 +203,7 @@ class ActivityController extends Controller
                 'action' => 'C',
             ];
             // dd($datasArr);
-            $pushDataToApi = RestepService::setactivities_nonstrava($datasArr, $request);
+            // $pushDataToApi = RestepService::setactivities_nonstrava($datasArr, $request);
             return Helper::createResponse(200, 'Success', $activity_tracking);
 
         } else {

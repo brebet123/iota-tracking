@@ -15,6 +15,11 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->get('/php-info', function () use ($router) {
+    // return $router->app->version();
+    return phpinfo();
+});
+
 $router->get('refresh-token', 'Auth\AuthController@refreshToken');
 $router->get('version', 'Auth\AuthController@version');
 
